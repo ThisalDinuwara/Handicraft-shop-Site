@@ -4,7 +4,7 @@ class Database {
     private $host = "localhost";        // Your MySQL host (usually localhost)
     private $db_name = "kandu_pinnawala_shop";  // Database name
     private $username = "root";         // Your MySQL username
-    private $password = "";             // Your MySQL password (empty for XAMPP default)
+    private $password = "Dinuwara@2005";             // Your MySQL password (empty for XAMPP default)
     public $conn;
 
     public function getConnection() {
