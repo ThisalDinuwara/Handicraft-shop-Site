@@ -5,29 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandu Pinnawala Handicraft Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'red': {
-                            50: '#fef2f2',
-                            100: '#fee2e2',
-                            200: '#fecaca',
-                            300: '#fca5a5',
-                            400: '#f87171',
-                            500: '#ef4444',
-                            600: '#dc2626',
-                            700: '#b91c1c',
-                            800: '#991b1b',
-                            900: '#7f1d1d',
-                            950: '#450a0a'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+<script>
+  const toggle = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+
+  // Load user theme preference
+  if (localStorage.theme === 'dark' || 
+     (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    html.classList.add('dark');
+  }
+
+  toggle.addEventListener('click', () => {
+    if (html.classList.contains('dark')) {
+      html.classList.remove('dark');
+      localStorage.theme = 'light';
+    } else {
+      html.classList.add('dark');
+      localStorage.theme = 'dark';
+    }
+  });
+</script>
+
     <style>
         @keyframes float {
             0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); }
@@ -104,18 +102,24 @@
                     </div>
                 </div>
 
-                <!-- Desktop Navigation -->
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="hover:text-yellow-300 transition-colors">Home</a>
-                    <a href="#products" class="hover:text-yellow-300 transition-colors">Products</a>
-                    <button onclick="openCustomModal()" class="hover:text-yellow-300 transition-colors flex items-center space-x-1">
-                        <span>🎨</span>
-                        <span>Custom Order</span>
-                    </button>
-                    <a href="#about" class="hover:text-yellow-300 transition-colors">About</a>
-                    <a href="#gallery" class="hover:text-yellow-300 transition-colors">Gallery</a>
-                    <a href="#contact" class="hover:text-yellow-300 transition-colors">Contact</a>
-                </nav>
+<!-- Desktop Navigation -->
+<nav class="hidden md:flex items-center space-x-8 text-gray-800 dark:text-gray-100">
+  <a href="#home" class="hover:text-yellow-300 transition-colors">Home</a>
+  <a href="#products" class="hover:text-yellow-300 transition-colors">Products</a>
+  <button onclick="openCustomModal()" class="hover:text-yellow-300 transition-colors flex items-center space-x-1">
+    <span>🎨</span>
+    <span>Custom Order</span>
+  </button>
+  <a href="#about" class="hover:text-yellow-300 transition-colors">About</a>
+  <a href="#gallery" class="hover:text-yellow-300 transition-colors">Gallery</a>
+  <a href="#contact" class="hover:text-yellow-300 transition-colors">Contact</a>
+
+  <!-- Dark/Light Toggle Button -->
+  <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+    🌙 / ☀️
+  </button>
+</nav>
+
 
                 <!-- Desktop Actions -->
                 <div class="hidden md:flex items-center space-x-4">
@@ -184,7 +188,7 @@
     <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Hero Background Image -->
         <div class="absolute inset-0 z-0">
-            <img src="image/IMG_3920.JPG" alt="Sri Lankan Handicrafts" class="w-full h-full object-cover">
+            <img src="image/background1.jpg" alt="Sri Lankan Handicrafts" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-br from-red-950/90 via-red-900/85 to-red-800/90"></div>
         </div>
 
@@ -198,6 +202,8 @@
 
                 <!-- Main Heading -->
                 <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    <span class="text-yellow-300">Welcome To</span>
+                    <br>
                     <span class="text-yellow-300">Kandu</span>
                     <br>
                     <span class="text-white">Pinnawala</span>
@@ -345,7 +351,7 @@
                 <!-- Image -->
                 <div class="relative">
                     <div class="relative z-10">
-                        <img src="https://images.pexels.com/photos/6069118/pexels-photo-6069118.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Artisan at work" class="w-full h-96 object-cover rounded-2xl shadow-2xl">
+                        <img src="image/logo.jpeg" alt="Artisan at work" class="w-full h-96 object-cover rounded-2xl shadow-2xl">
                     </div>
                     
                     <!-- Decorative Elements -->
