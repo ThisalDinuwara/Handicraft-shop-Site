@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandu Pinnawala Handicraft Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .animate-float {
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-30px) translateX(15px) rotate(8deg) scale(1.1);
+            }
+            50% {
+                transform: translateY(-15px) translateX(-20px) rotate(-5deg) scale(0.9);
+            }
+            75% {
+                transform: translateY(-40px) translateX(8px) rotate(3deg) scale(1.05);
+            }
+        }
+        
+        .animate-float-slow {
+            animation: floatSlow 35s ease-in-out infinite;
+        }
+        
+        @keyframes floatSlow {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+            }
+            33% {
+                transform: translateY(-25px) translateX(20px) rotate(10deg) scale(1.15);
+            }
+            66% {
+                transform: translateY(-35px) translateX(-25px) rotate(-8deg) scale(0.85);
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #7f1d1d;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #991b1b;
+        }
+
+        /* Smooth transitions for all interactive elements */
+        * {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+
+        /* Focus styles for accessibility */
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        select:focus-visible {
+            outline: 2px solid #eab308;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Floating Masks Background -->
+    <div id="floating-masks" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+    <!-- Header -->
+    <header class="bg-red-900/95 backdrop-blur-sm text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center">
+                        <span class="text-xl font-bold text-yellow-300">K</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-yellow-300">Kandu Pinnawala</h1>
+                        <p class="text-xs text-red-200">Traditional Handicrafts</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="hover:text-yellow-300 transition-colors">Home</a>
+                    <a href="#products" class="hover:text-yellow-300 transition-colors">Products</a>
+                    <button onclick="openCustomProduct()" class="hover:text-yellow-300 transition-colors flex items-center space-x-1">
+                        <i data-lucide="palette" class="w-4 h-4"></i>
+                        <span>Custom Order</span>
+                    </button>
+                    <a href="#about" class="hover:text-yellow-300 transition-colors">About</a>
+                    <a href="#gallery" class="hover:text-yellow-300 transition-colors">Gallery</a>
+                    <a href="#contact" class="hover:text-yellow-300 transition-colors">Contact</a>
+                </nav>
+
+                <!-- Desktop Actions -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <button onclick="openSearch()" class="p-2 hover:bg-red-800 rounded-lg transition-colors">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button onclick="openLogin()" class="p-2 hover:bg-red-800 rounded-lg transition-colors">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </button>
+                    <button onclick="openCart()" class="p-2 hover:bg-red-800 rounded-lg transition-colors relative">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-yellow-500 text-red-900 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold hidden">0</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 hover:bg-red-800 rounded-lg transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden py-4 border-t border-red-800 hidden">
+                <nav class="flex flex-col space-y-4">
+                    <a href="#home" class="hover:text-yellow-300 transition-colors">Home</a>
+                    <a href="#products" class="hover:text-yellow-300 transition-colors">Products</a>
+                    <button onclick="openCustomProduct()" class="hover:text-yellow-300 transition-colors flex items-center space-x-2 text-left">
+                        <i data-lucide="palette" class="w-4 h-4"></i>
+                        <span>Custom Order</span>
+                    </button>
+                    <a href="#about" class="hover:text-yellow-300 transition-colors">About</a>
+                    <a href="#gallery" class="hover:text-yellow-300 transition-colors">Gallery</a>
+                    <a href="#contact" class="hover:text-yellow-300 transition-colors">Contact</a>
+                    <div class="flex items-center space-x-4 pt-4 border-t border-red-800">
+                        <button onclick="openSearch()" class="p-2 hover:bg-red-800 rounded-lg transition-colors">
+                            <i data-lucide="search" class="w-5 h-5"></i>
+                        </button>
+                        <button onclick="openLogin()" class="p-2 hover:bg-red-800 rounded-lg transition-colors">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </button>
+                        <button onclick="openCart()" class="p-2 hover:bg-red-800 rounded-lg transition-colors relative">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span class="absolute -top-1 -right-1 bg-yellow-500 text-red-900 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold hidden">0</span>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Hero Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img
+                src="https://images.pexels.com/photos/6069118/pexels-photo-6069118.jpeg?auto=compress&cs=tinysrgb&w=1920"
+                alt="Sri Lankan Handicrafts"
+                class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-br from-red-950/90 via-red-900/85 to-red-800/90"></div>
+        </div>
+
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+        </div>
+
+        <div class="container mx-auto px-4 text-center text-white relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <!-- Badge -->
+                <div class="inline-flex items-center space-x-2 bg-red-800/50 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-red-700">
+                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                    <span class="text-sm font-medium">Authentic Sri Lankan Handicrafts</span>
+                </div>
+
+                <!-- Main Heading -->
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    <span class="text-yellow-300">Kandu</span>
+                    <br />
+                    <span class="text-white">Pinnawala</span>
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-xl md:text-2xl text-red-100 mb-8 leading-relaxed">
+                    Discover the rich heritage of Sri Lankan craftsmanship through our 
+                    <br class="hidden md:block" />
+                    exquisite collection of traditional handicrafts and artisanal treasures
+                </p>
+
+                <!-- Description -->
+                <p class="text-lg text-red-200 mb-10 max-w-2xl mx-auto">
+                    From intricately carved wooden masks to handwoven textiles, each piece tells a story 
+                    of generations-old traditions passed down through skilled artisans in the heart of Sri Lanka.
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                    <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="group bg-yellow-500 hover:bg-yellow-400 text-red-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2">
+                        <span>Explore Collection</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    <button onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})" class="border-2 border-white hover:bg-white hover:text-red-900 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105">
+                        Learn Our Story
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-8 mt-16 pt-8 border-t border-red-700/50">
+                    <div>
+                        <div class="text-3xl md:text-4xl font-bold text-yellow-300 mb-2">500+</div>
+                        <div class="text-red-200">Unique Items</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl md:text-4xl font-bold text-yellow-300 mb-2">25+</div>
+                        <div class="text-red-200">Master Artisans</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl md:text-4xl font-bold text-yellow-300 mb-2">15</div>
+                        <div class="text-red-200">Years Experience</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+                <div class="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gradient-to-b from-red-50 to-white relative">
+        <div class="container mx-auto px-4">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-red-900 mb-4">
+                    Our <span class="text-yellow-600">Collection</span>
+                </h2>
+                <p class="text-xl text-red-700 max-w-3xl mx-auto leading-relaxed">
+                    Each piece in our collection represents the finest Sri Lankan craftsmanship, 
+                    carefully curated to bring you authentic traditional art
+                </p>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button onclick="filterProducts('all')" class="category-btn active px-6 py-3 rounded-full font-medium transition-all duration-300 bg-red-900 text-white shadow-lg transform scale-105">
+                    All Products
+                </button>
+                <button onclick="filterProducts('masks')" class="category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 bg-white text-red-900 border-2 border-red-200 hover:border-red-400 hover:bg-red-50">
+                    Traditional Masks
+                </button>
+                <button onclick="filterProducts('textiles')" class="category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 bg-white text-red-900 border-2 border-red-200 hover:border-red-400 hover:bg-red-50">
+                    Textiles
+                </button>
+                <button onclick="filterProducts('wood')" class="category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 bg-white text-red-900 border-2 border-red-200 hover:border-red-400 hover:bg-red-50">
+                    Wood Crafts
+                </button>
+                <button onclick="filterProducts('pottery')" class="category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 bg-white text-red-900 border-2 border-red-200 hover:border-red-400 hover:bg-red-50">
+                    Pottery
+                </button>
+                <button onclick="filterProducts('jewelry')" class="category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 bg-white text-red-900 border-2 border-red-200 hover:border-red-400 hover:bg-red-50">
+                    Jewelry
+                </button>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Products will be loaded here by JavaScript -->
+            </div>
+
+            <!-- Load More Button -->
+            <div class="text-center mt-12">
+                <button class="bg-yellow-500 hover:bg-yellow-400 text-red-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    Load More Products
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gradient-to-b from-white to-red-50 relative">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Content -->
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-red-900 mb-6">
+                        About <span class="text-yellow-600">Kandu Pinnawala</span>
+                    </h2>
+                    
+                    <p class="text-lg text-red-700 mb-6 leading-relaxed">
+                        Nestled in the heart of Sri Lanka, Kandu Pinnawala has been a beacon of traditional 
+                        craftsmanship for over 15 years. Our journey began with a simple mission: to preserve 
+                        and share the incredible artisanal heritage of our beautiful island nation.
+                    </p>
+                    
+                    <p class="text-lg text-red-700 mb-8 leading-relaxed">
+                        From the ancient art of mask carving to the delicate weaving of traditional textiles, 
+                        each piece in our collection represents hours of meticulous work by master artisans 
+                        who have inherited their skills through generations of family tradition.
+                    </p>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="text-center p-4 bg-white rounded-lg shadow-md border border-red-100">
+                            <div class="text-3xl font-bold text-red-900 mb-2">500+</div>
+                            <div class="text-red-600 font-medium">Unique Products</div>
+                        </div>
+                        <div class="text-center p-4 bg-white rounded-lg shadow-md border border-red-100">
+                            <div class="text-3xl font-bold text-red-900 mb-2">25+</div>
+                            <div class="text-red-600 font-medium">Master Artisans</div>
+                        </div>
+                    </div>
+
+                    <button class="bg-red-900 hover:bg-red-800 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Learn More About Us
+                    </button>
+                </div>
+
+                <!-- Image -->
+                <div class="relative">
+                    <div class="relative z-10">
+                        <img
+                            src="https://images.pexels.com/photos/6069118/pexels-photo-6069118.jpeg?auto=compress&cs=tinysrgb&w=600"
+                            alt="Artisan at work"
+                            class="w-full h-96 object-cover rounded-2xl shadow-2xl"
+                        />
+                    </div>
+                    
+                    <!-- Decorative Elements -->
+                    <div class="absolute -top-6 -left-6 w-24 h-24 bg-yellow-400 rounded-full opacity-20 z-0"></div>
+                    <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-red-600 rounded-full opacity-20 z-0"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-gradient-to-b from-red-50 to-white relative">
+        <div class="container mx-auto px-4">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-red-900 mb-4">
+                    Our <span class="text-yellow-600">Gallery</span>
+                </h2>
+                <p class="text-xl text-red-700 max-w-3xl mx-auto leading-relaxed">
+                    Take a glimpse into our workshop and see the incredible artistry that goes into 
+                    creating each unique piece in our collection
+                </p>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer">
+                    <img
+                        src="https://images.pexels.com/photos/6069119/pexels-photo-6069119.jpeg?auto=compress&cs=tinysrgb&w=400"
+                        alt="Traditional Mask Making"
+                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-red-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <span class="inline-block bg-yellow-500 text-red-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
+                                Craftsmanship
+                            </span>
+                            <h3 class="text-white font-bold text-lg">Traditional Mask Making</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer">
+                    <img
+                        src="https://images.pexels.com/photos/6069120/pexels-photo-6069120.jpeg?auto=compress&cs=tinysrgb&w=400"
+                        alt="Batik Textile Art"
+                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-red-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <span class="inline-block bg-yellow-500 text-red-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
+                                Textiles
+                            </span>
+                            <h3 class="text-white font-bold text-lg">Batik Textile Art</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer">
+                    <img
+                        src="https://images.pexels.com/photos/6069121/pexels-photo-6069121.jpeg?auto=compress&cs=tinysrgb&w=400"
+                        alt="Wood Carving Workshop"
+                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-red-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <span class="inline-block bg-yellow-500 text-red-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
+                                Wood Crafts
+                            </span>
+                            <h3 class="text-white font-bold text-lg">Wood Carving Workshop</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer">
+                    <img
+                        src="https://images.pexels.com/photos/6069122/pexels-photo-6069122.jpeg?auto=compress&cs=tinysrgb&w=400"
+                        alt="Pottery Creation"
+                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-red-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <span class="inline-block bg-yellow-500 text-red-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
+                                Pottery
+                            </span>
+                            <h3 class="text-white font-bold text-lg">Pottery Creation</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gradient-to-b from-white to-red-50 relative">
+        <div class="container mx-auto px-4">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-red-900 mb-4">
+                    Get In <span class="text-yellow-600">Touch</span>
+                </h2>
+                <p class="text-xl text-red-700 max-w-3xl mx-auto leading-relaxed">
+                    Have questions about our products or want to place a custom order? 
+                    We'd love to hear from you and help bring authentic Sri Lankan craftsmanship to your home.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <!-- Contact Information -->
+                <div>
+                    <h3 class="text-2xl font-bold text-red-900 mb-8">Contact Information</h3>
+                    
+                    <div class="space-y-8">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-red-900 text-white rounded-lg flex items-center justify-center">
+                                <i data-lucide="map-pin" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-red-900 mb-2">Visit Our Shop</h4>
+                                <p class="text-red-700 mb-1">123 Handicraft Street</p>
+                                <p class="text-red-700 mb-1">Pinnawala, Sri Lanka</p>
+                                <p class="text-red-700">Near Elephant Orphanage</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-red-900 text-white rounded-lg flex items-center justify-center">
+                                <i data-lucide="phone" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-red-900 mb-2">Call Us</h4>
+                                <p class="text-red-700 mb-1">+94 77 123 4567</p>
+                                <p class="text-red-700 mb-1">+94 11 234 5678</p>
+                                <p class="text-red-700">Mon-Sat: 9AM-6PM</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-red-900 text-white rounded-lg flex items-center justify-center">
+                                <i data-lucide="mail" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-red-900 mb-2">Email Us</h4>
+                                <p class="text-red-700 mb-1">info@kandupinnawala.lk</p>
+                                <p class="text-red-700 mb-1">orders@kandupinnawala.lk</p>
+                                <p class="text-red-700">support@kandupinnawala.lk</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div>
+                    <h3 class="text-2xl font-bold text-red-900 mb-8">Send Us a Message</h3>
+                    
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-red-900 mb-2">
+                                    Full Name *
+                                </label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    required
+                                    class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
+                                    placeholder="Your full name"
+                                />
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-red-900 mb-2">
+                                    Email Address *
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
+                                    placeholder="your.email@example.com"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-red-900 mb-2">
+                                Subject *
+                            </label>
+                            <select
+                                id="subject"
+                                name="subject"
+                                required
+                                class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
+                            >
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="product">Product Information</option>
+                                <option value="custom">Custom Order</option>
+                                <option value="wholesale">Wholesale Inquiry</option>
+                                <option value="support">Customer Support</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-red-900 mb-2">
+                                Message *
+                            </label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                required
+                                rows="6"
+                                class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors resize-none"
+                                placeholder="Tell us about your inquiry, custom requirements, or any questions you have about our products..."
+                            ></textarea>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="w-full bg-red-900 hover:bg-red-800 text-white py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
+                        >
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                            <span>Send Message</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-red-950 text-white relative overflow-hidden">
+        <div class="container mx-auto px-4 relative z-10">
+            <!-- Main Footer Content -->
+            <div class="py-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Company Info -->
+                    <div class="lg:col-span-1">
+                        <div class="flex items-center space-x-2 mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center">
+                                <span class="text-2xl font-bold text-yellow-300">K</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-yellow-300">Kandu Pinnawala</h3>
+                                <p class="text-sm text-red-200">Traditional Handicrafts</p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-red-200 mb-6 leading-relaxed">
+                            Preserving Sri Lankan heritage through authentic handicrafts. 
+                            Each piece tells a story of tradition, skill, and cultural pride.
+                        </p>
+
+                        <!-- Contact Info -->
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-yellow-400 flex-shrink-0"></i>
+                                <span class="text-red-200">123 Handicraft Street, Pinnawala, Sri Lanka</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="phone" class="w-5 h-5 text-yellow-400 flex-shrink-0"></i>
+                                <span class="text-red-200">+94 77 123 4567</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="mail" class="w-5 h-5 text-yellow-400 flex-shrink-0"></i>
+                                <span class="text-red-200">info@kandupinnawala.lk</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="text-xl font-bold text-yellow-300 mb-6">Quick Links</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#home" class="text-red-200 hover:text-yellow-300 transition-colors">Home</a></li>
+                            <li><a href="#products" class="text-red-200 hover:text-yellow-300 transition-colors">Products</a></li>
+                            <li><a href="#about" class="text-red-200 hover:text-yellow-300 transition-colors">About</a></li>
+                            <li><a href="#gallery" class="text-red-200 hover:text-yellow-300 transition-colors">Gallery</a></li>
+                            <li><a href="#contact" class="text-red-200 hover:text-yellow-300 transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Product Categories -->
+                    <div>
+                        <h4 class="text-xl font-bold text-yellow-300 mb-6">Categories</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#" class="text-red-200 hover:text-yellow-300 transition-colors">Traditional Masks</a></li>
+                            <li><a href="#" class="text-red-200 hover:text-yellow-300 transition-colors">Handwoven Textiles</a></li>
+                            <li><a href="#" class="text-red-200 hover:text-yellow-300 transition-colors">Wood Carvings</a></li>
+                            <li><a href="#" class="text-red-200 hover:text-yellow-300 transition-colors">Pottery & Ceramics</a></li>
+                            <li><a href="#" class="text-red-200 hover:text-yellow-300 transition-colors">Jewelry & Accessories</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Newsletter -->
+                    <div>
+                        <h4 class="text-xl font-bold text-yellow-300 mb-6">Stay Updated</h4>
+                        <p class="text-red-200 mb-4">
+                            Subscribe to our newsletter for updates about new products and special offers.
+                        </p>
+                        <form id="newsletter-form" class="space-y-4">
+                            <input
+                                type="email"
+                                placeholder="Enter your email"
+                                class="w-full px-4 py-3 bg-red-800 border border-red-700 rounded-lg text-white placeholder-red-300 focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-colors"
+                            />
+                            <button
+                                type="submit"
+                                class="w-full bg-yellow-500 hover:bg-yellow-400 text-red-900 px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                            >
+                                Subscribe
+                            </button>
+                        </form>
+
+                        <!-- Social Links -->
+                        <div class="mt-6">
+                            <h5 class="text-lg font-semibold text-yellow-300 mb-4">Follow Us</h5>
+                            <div class="flex space-x-4">
+                                <a href="#" class="w-10 h-10 bg-red-800 hover:bg-yellow-500 text-white hover:text-red-900 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                                    <i data-lucide="facebook" class="w-5 h-5"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-red-800 hover:bg-yellow-500 text-white hover:text-red-900 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                                    <i data-lucide="instagram" class="w-5 h-5"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-red-800 hover:bg-yellow-500 text-white hover:text-red-900 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                                    <i data-lucide="twitter" class="w-5 h-5"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-red-800 hover:bg-yellow-500 text-white hover:text-red-900 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                                    <i data-lucide="youtube" class="w-5 h-5"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="py-6 border-t border-red-800">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                    <div class="text-red-300 text-sm">
+                        © 2024 Kandu Pinnawala. All rights reserved. Preserving Sri Lankan heritage with pride.
+                    </div>
+                    <div class="flex items-center space-x-2 text-red-300 text-sm">
+                        <span>Made with</span>
+                        <i data-lucide="heart" class="w-4 h-4 text-red-500 fill-current"></i>
+                        <span>in Sri Lanka</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals will be inserted here by JavaScript -->
+    <div id="modals-container"></div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Sample products data
+        const products = [
+            {
+                id: 1,
+                name: 'Raksha Devil Mask',
+                category: 'masks',
+                price: 4500,
+                originalPrice: 5500,
+                image: 'https://images.pexels.com/photos/6069112/pexels-photo-6069112.jpeg?auto=compress&cs=tinysrgb&w=400',
+                rating: 4.8,
+                reviews: 24,
+                isNew: true,
+                isFeatured: true,
+            },
+            {
+                id: 2,
+                name: 'Handwoven Batik Sarong',
+                category: 'textiles',
+                price: 3200,
+                originalPrice: 4000,
+                image: 'https://images.pexels.com/photos/6069113/pexels-photo-6069113.jpeg?auto=compress&cs=tinysrgb&w=400',
+                rating: 4.9,
+                reviews: 18,
+                isNew: false,
+                isFeatured: true,
+            },
+            {
+                id: 3,
+                name: 'Carved Elephant Sculpture',
+                category: 'wood',
+                price: 8900,
+                originalPrice: 10500,
+                image: 'https://images.pexels.com/photos/6069114/pexels-photo-6069114.jpeg?auto=compress&cs=tinysrgb&w=400',
+                rating: 4.7,
+                reviews: 31,
+                isNew: true,
+                isFeatured: false,
+            },
+            {
+                id: 4,
+                name: 'Clay Water Pot Set',
+                category: 'pottery',
+                price: 2800,
+                originalPrice: 3500,
+                image: 'https://images.pexels.com/photos/6069115/pexels-photo-6069115.jpeg?auto=compress&cs=tinysrgb&w=400',
+                rating: 4.6,
+                reviews: 15,
+                isNew: false,
+                isFeatured: false,
+            },
+            {
+                id: 5,
+                name: 'Silver Temple Jewelry',
+                category: 'jewelry',
+                price: 12500,
+                originalPrice: 15000,
+                image: 'https://images.pexels.com/photos/6069116/pexels-photo-6069116.jpeg?auto=compress&cs=tinysrgb&w=400',
+                rating: 4.9,
+                reviews: 42,
+                isNew: true,
+                isFeatured: true,
+            },
+            {
+                id: 6,
+                name: 'Peacock Dance Mask',
+                category: 'masks',
+                price: 5200,
+                originalPrice: 6200,
+                image: 'https://images.pexels.com/photos/6069117/pexels-photo-6069117.jpeg?auto=compress&cs=tinysrgb&w=400',
+                rating: 4.8,
+                reviews: 28,
+                isNew: false,
+                isFeatured: true,
+            },
+        ];
+
+        // Cart state
+        let cart = [];
+
+        // Initialize floating masks
+        function initFloatingMasks() {
+            const container = document.getElementById('floating-masks');
+            const masks = [
+                { size: 'w-16 h-16', delay: '0s', duration: '20s', left: '10%', top: '20%' },
+                { size: 'w-12 h-12', delay: '5s', duration: '25s', left: '80%', top: '10%' },
+                { size: 'w-20 h-20', delay: '10s', duration: '30s', left: '15%', top: '70%' },
+                { size: 'w-14 h-14', delay: '15s', duration: '22s', left: '70%', top: '60%' },
+                { size: 'w-18 h-18', delay: '8s', duration: '28s', left: '50%', top: '80%' },
+                { size: 'w-10 h-10', delay: '3s', duration: '35s', left: '90%', top: '40%' },
+                { size: 'w-22 h-22', delay: '12s', duration: '18s', left: '5%', top: '50%' },
+                { size: 'w-8 h-8', delay: '18s', duration: '26s', left: '60%', top: '15%' },
+                { size: 'w-16 h-16', delay: '6s', duration: '32s', left: '25%', top: '90%' },
+                { size: 'w-14 h-14', delay: '20s', duration: '24s', left: '85%', top: '75%' },
+            ];
+
+            masks.forEach((mask, index) => {
+                const maskElement = document.createElement('div');
+                maskElement.className = `absolute ${mask.size} opacity-10 ${index % 2 === 0 ? 'animate-float' : 'animate-float-slow'}`;
+                maskElement.style.animationDelay = mask.delay;
+                maskElement.style.animationDuration = mask.duration;
+                maskElement.style.left = mask.left;
+                maskElement.style.top = mask.top;
+                
+                maskElement.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" class="w-full h-full text-red-600">
+                        <g fill="currentColor">
+                            <path d="M12 2C8.5 2 6 4.5 6 8v4c0 1.5.5 3 1.5 4.2L12 22l4.5-5.8c1-1.2 1.5-2.7 1.5-4.2V8c0-3.5-2.5-6-6-6z" />
+                            <path d="M8 6c0-.5.5-1 1-1h6c.5 0 1 .5 1 1v1H8V6z" />
+                            <circle cx="10" cy="9" r="1" />
+                            <circle cx="14" cy="9" r="1" />
+                            <path d="M9.5 14c0-1 1-2 2.5-2s2.5 1 2.5 2H9.5z" />
+                            <path d="M7 10h2v1H7zm8 0h2v1h-2z" />
+                            <path d="M12 4v2h-1V4h1z" />
+                        </g>
+                    </svg>
+                `;
+                
+                container.appendChild(maskElement);
+            });
+        }
+
+        // Load products
+        function loadProducts(category = 'all') {
+            const grid = document.getElementById('products-grid');
+            const filteredProducts = category === 'all' ? products : products.filter(p => p.category === category);
+            
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-red-100">
+                    <!-- Product Image -->
+                    <div class="relative overflow-hidden">
+                        <img
+                            src="${product.image}"
+                            alt="${product.name}"
+                            class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-4 left-4 flex flex-col space-y-2">
+                            ${product.isNew ? '<span class="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">NEW</span>' : ''}
+                            ${product.isFeatured ? '<span class="bg-yellow-500 text-red-900 px-3 py-1 rounded-full text-xs font-bold">FEATURED</span>' : ''}
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button class="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors">
+                                <i data-lucide="heart" class="w-5 h-5 text-red-600"></i>
+                            </button>
+                            <button class="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors">
+                                <i data-lucide="eye" class="w-5 h-5 text-red-600"></i>
+                            </button>
+                        </div>
+
+                        <!-- Discount Badge -->
+                        ${product.originalPrice > product.price ? `
+                            <div class="absolute bottom-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                                ${Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-red-900 mb-2 group-hover:text-red-700 transition-colors">
+                            ${product.name}
+                        </h3>
+                        
+                        <!-- Rating -->
+                        <div class="flex items-center space-x-2 mb-3">
+                            <div class="flex items-center">
+                                ${Array.from({length: 5}, (_, i) => `
+                                    <i data-lucide="star" class="w-4 h-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}"></i>
+                                `).join('')}
+                            </div>
+                            <span class="text-sm text-gray-600">
+                                ${product.rating} (${product.reviews} reviews)
+                            </span>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="text-2xl font-bold text-red-900">
+                                Rs. ${product.price.toLocaleString()}
+                            </span>
+                            ${product.originalPrice > product.price ? `
+                                <span class="text-lg text-gray-500 line-through">
+                                    Rs. ${product.originalPrice.toLocaleString()}
+                                </span>
+                            ` : ''}
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <button 
+                            onclick="addToCart(${product.id})"
+                            class="add-to-cart-btn w-full bg-red-900 hover:bg-red-800 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 group"
+                            data-product-id="${product.id}"
+                        >
+                            <i data-lucide="shopping-cart" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                            <span>Add to Cart</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Re-initialize Lucide icons for new content
+            lucide.createIcons();
+        }
+
+        // Filter products
+        function filterProducts(category) {
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-red-900', 'text-white', 'shadow-lg', 'transform', 'scale-105');
+                btn.classList.add('bg-white', 'text-red-900', 'border-2', 'border-red-200', 'hover:border-red-400', 'hover:bg-red-50');
+            });
+            
+            event.target.classList.add('active', 'bg-red-900', 'text-white', 'shadow-lg', 'transform', 'scale-105');
+            event.target.classList.remove('bg-white', 'text-red-900', 'border-2', 'border-red-200', 'hover:border-red-400', 'hover:bg-red-50');
+            
+            loadProducts(category);
+        }
+
+        // Add to cart function
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    originalPrice: product.originalPrice,
+                    image: product.image,
+                    quantity: 1,
+                    category: product.category,
+                });
+            }
+
+            // Update cart count
+            updateCartCount();
+
+            // Show visual feedback
+            const button = document.querySelector(`[data-product-id="${productId}"]`);
+            const originalContent = button.innerHTML;
+            
+            button.classList.remove('bg-red-900', 'hover:bg-red-800');
+            button.classList.add('bg-green-600', 'hover:bg-green-700');
+            button.innerHTML = `
+                <i data-lucide="check" class="w-5 h-5"></i>
+                <span>Added to Cart!</span>
+            `;
+            
+            lucide.createIcons();
+
+            // Reset after 2 seconds
+            setTimeout(() => {
+                button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                button.classList.add('bg-red-900', 'hover:bg-red-800');
+                button.innerHTML = originalContent;
+                lucide.createIcons();
+            }, 2000);
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            if (totalItems > 0) {
+                cartCount.textContent = totalItems;
+                cartCount.classList.remove('hidden');
+            } else {
+                cartCount.classList.add('hidden');
+            }
+        }
+
+        // Modal functions
+        function openSearch() {
+            // Create search modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto shadow-2xl">
+                    <div class="sticky top-0 bg-white border-b border-red-100 p-6 flex items-center justify-between rounded-t-2xl">
+                        <h2 class="text-2xl font-bold text-red-900">Search Products</h2>
+                        <button onclick="closeModal()" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                            <i data-lucide="x" class="w-6 h-6 text-red-600"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="relative mb-6">
+                            <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-red-400"></i>
+                            <input
+                                type="text"
+                                placeholder="Search for handicrafts, masks, textiles..."
+                                class="w-full pl-12 pr-4 py-4 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
+                            />
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            ${products.slice(0, 4).map(product => `
+                                <div class="flex items-center space-x-4 p-4 bg-red-50 rounded-lg border border-red-100 hover:shadow-md transition-shadow cursor-pointer">
+                                    <img src="${product.image}" alt="${product.name}" class="w-16 h-16 object-cover rounded-lg" />
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-red-900 mb-1">${product.name}</h4>
+                                        <p class="text-sm text-red-600 mb-2">${product.category}</p>
+                                        <p class="font-bold text-red-900">Rs. ${product.price.toLocaleString()}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modals-container').appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function openLogin() {
+            // Create login modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <div class="sticky top-0 bg-white border-b border-red-100 p-6 flex items-center justify-between rounded-t-2xl">
+                        <h2 class="text-2xl font-bold text-red-900">Welcome Back</h2>
+                        <button onclick="closeModal()" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                            <i data-lucide="x" class="w-6 h-6 text-red-600"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <form class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-red-900 mb-2">Email Address</label>
+                                <input type="email" class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="your.email@example.com" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-red-900 mb-2">Password</label>
+                                <input type="password" class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Enter your password" />
+                            </div>
+                            <button type="submit" class="w-full bg-red-900 hover:bg-red-800 text-white py-3 rounded-lg font-semibold transition-colors">
+                                Sign In
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modals-container').appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function openCart() {
+            // Create cart modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 z-50 flex';
+            modal.innerHTML = `
+                <div class="ml-auto bg-white w-full max-w-md h-full overflow-y-auto">
+                    <div class="sticky top-0 bg-white border-b border-red-100 p-6 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="shopping-bag" class="w-6 h-6 text-red-600"></i>
+                            <h2 class="text-xl font-bold text-red-900">Shopping Cart</h2>
+                        </div>
+                        <button onclick="closeModal()" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                            <i data-lucide="arrow-left" class="w-6 h-6 text-red-600"></i>
+                        </button>
+                    </div>
+                    
+                    ${cart.length === 0 ? `
+                        <div class="flex flex-col items-center justify-center h-96 p-6 text-center">
+                            <i data-lucide="shopping-bag" class="w-16 h-16 text-red-300 mb-4"></i>
+                            <h3 class="text-xl font-semibold text-red-900 mb-2">Your cart is empty</h3>
+                            <p class="text-red-600 mb-6">Add some beautiful handicrafts to get started!</p>
+                            <button onclick="closeModal()" class="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                                Continue Shopping
+                            </button>
+                        </div>
+                    ` : `
+                        <div class="p-6 space-y-4">
+                            ${cart.map(item => `
+                                <div class="flex space-x-4 p-4 bg-red-50 rounded-lg border border-red-100">
+                                    <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg" />
+                                    <div class="flex-1">
+                                        <h3 class="font-semibold text-red-900 mb-1">${item.name}</h3>
+                                        <p class="text-sm text-red-600 mb-2">${item.category}</p>
+                                        <div class="flex items-center space-x-2 mb-2">
+                                            <span class="font-bold text-red-900">Rs. ${item.price.toLocaleString()}</span>
+                                            ${item.originalPrice ? `<span class="text-sm text-gray-500 line-through">Rs. ${item.originalPrice.toLocaleString()}</span>` : ''}
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2">
+                                                <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})" class="w-8 h-8 flex items-center justify-center bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
+                                                    <i data-lucide="minus" class="w-4 h-4 text-red-600"></i>
+                                                </button>
+                                                <span class="w-8 text-center font-semibold text-red-900">${item.quantity}</span>
+                                                <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})" class="w-8 h-8 flex items-center justify-center bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
+                                                    <i data-lucide="plus" class="w-4 h-4 text-red-600"></i>
+                                                </button>
+                                            </div>
+                                            <button onclick="removeFromCart(${item.id})" class="p-2 text-red-500 hover:bg-red-100 rounded-lg transition-colors">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="p-6 bg-red-50 border-t border-red-100">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-lg font-semibold text-red-900">Total</span>
+                                <span class="text-xl font-bold text-red-900">Rs. ${cart.reduce((total, item) => total + (item.price * item.quantity), 0).toLocaleString()}</span>
+                            </div>
+                            <button class="w-full bg-red-900 hover:bg-red-800 text-white py-4 rounded-lg font-semibold text-lg transition-colors">
+                                Proceed to Checkout
+                            </button>
+                        </div>
+                    `}
+                </div>
+            `;
+            
+            document.getElementById('modals-container').appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function openCustomProduct() {
+            // Create custom product modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="sticky top-0 bg-white border-b border-red-100 p-6 flex items-center justify-between rounded-t-2xl">
+                        <h2 class="text-2xl font-bold text-red-900">Custom Product Request</h2>
+                        <button onclick="closeModal()" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                            <i data-lucide="x" class="w-6 h-6 text-red-600"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <form class="space-y-6">
+                            <div>
+                                <label class="block text-lg font-semibold text-red-900 mb-4">What would you like us to create?</label>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    <button type="button" class="p-3 rounded-lg border-2 border-red-200 hover:border-red-300 text-red-700 text-sm font-medium transition-all">Traditional Mask</button>
+                                    <button type="button" class="p-3 rounded-lg border-2 border-red-200 hover:border-red-300 text-red-700 text-sm font-medium transition-all">Wood Carving</button>
+                                    <button type="button" class="p-3 rounded-lg border-2 border-red-200 hover:border-red-300 text-red-700 text-sm font-medium transition-all">Batik Textile</button>
+                                    <button type="button" class="p-3 rounded-lg border-2 border-red-200 hover:border-red-300 text-red-700 text-sm font-medium transition-all">Pottery Item</button>
+                                    <button type="button" class="p-3 rounded-lg border-2 border-red-200 hover:border-red-300 text-red-700 text-sm font-medium transition-all">Jewelry Piece</button>
+                                    <button type="button" class="p-3 rounded-lg border-2 border-red-200 hover:border-red-300 text-red-700 text-sm font-medium transition-all">Custom Design</button>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-lg font-semibold text-red-900 mb-3">Detailed Description</label>
+                                <textarea rows="5" class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Please provide detailed description of what you want, including any specific cultural significance, patterns, or special requirements..."></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-red-700 mb-2">Full Name *</label>
+                                    <input type="text" required class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-red-700 mb-2">Email Address *</label>
+                                    <input type="email" required class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-red-700 mb-2">Phone Number</label>
+                                    <input type="tel" class="w-full px-4 py-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" />
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-4 pt-6 border-t border-red-100">
+                                <button type="button" onclick="closeModal()" class="px-6 py-3 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="px-8 py-3 bg-red-900 hover:bg-red-800 text-white rounded-lg font-semibold transition-colors">
+                                    Submit Request
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modals-container').appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeFromCart(productId);
+                return;
+            }
+            
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = newQuantity;
+                updateCartCount();
+                openCart(); // Refresh cart modal
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            openCart(); // Refresh cart modal
+        }
+
+        function closeModal() {
+            document.getElementById('modals-container').innerHTML = '';
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Form submissions
+        document.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (e.target.id === 'contact-form') {
+                alert('Thank you for your message! We will get back to you soon.');
+                e.target.reset();
+            } else if (e.target.id === 'newsletter-form') {
+                alert('Thank you for subscribing to our newsletter!');
+                e.target.reset();
+            } else {
+                alert('Form submitted successfully!');
+                closeModal();
+            }
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            initFloatingMasks();
+            loadProducts();
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>
